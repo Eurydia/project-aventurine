@@ -1,10 +1,7 @@
-import {
-	CssBaseline,
-	ThemeProvider,
-} from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { SnackbarProvider } from "notistack";
 import { FC, Fragment } from "react";
-import { LiveEditor } from "~components/LiveEditor";
+import { LiveEditor } from "~/components/LiveEditor";
 import { themeDark } from "./theme";
 
 /**
@@ -14,21 +11,21 @@ import { themeDark } from "./theme";
  * The "LiveEditor" component is the main component of the application, and this component is a wrapper for it.
  */
 export const App: FC = () => {
-	return (
-		<Fragment>
-			<CssBaseline />
-			<ThemeProvider theme={themeDark}>
-				<SnackbarProvider
-					preventDuplicate
-					autoHideDuration={2000}
-					anchorOrigin={{
-						vertical: "top",
-						horizontal: "center",
-					}}
-				>
-					<LiveEditor />
-				</SnackbarProvider>
-			</ThemeProvider>
-		</Fragment>
-	);
+  return (
+    <Fragment>
+      <CssBaseline />
+      <ThemeProvider theme={themeDark}>
+        <SnackbarProvider
+          preventDuplicate
+          autoHideDuration={2000}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <LiveEditor />
+        </SnackbarProvider>
+      </ThemeProvider>
+    </Fragment>
+  );
 };

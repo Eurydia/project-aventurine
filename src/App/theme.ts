@@ -46,18 +46,13 @@ export const themeDark = createTheme({
       focus: alpha(earth.clay, 0.22),
     },
   },
-  shape: {
-    borderRadius: 10,
-  },
   typography: {
     fontFamily: ["'Fira Code Variable'", "monospace"].join(","),
     button: {
       fontWeight: 650,
-      letterSpacing: "0.035em",
     },
     overline: {
       fontWeight: 700,
-      letterSpacing: "0.12em",
     },
   },
   components: {
@@ -67,7 +62,6 @@ export const themeDark = createTheme({
           colorScheme: "light",
         },
         body: {
-          minWidth: 320,
           minHeight: "100vh",
           backgroundColor: earth.canvas,
           scrollbarColor: `${earth.clay} ${earth.canvas}`,
@@ -77,48 +71,37 @@ export const themeDark = createTheme({
         },
       },
     },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: "none",
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
-        root: {
-          borderRadius: 8,
-          textTransform: "none",
-        },
+        root: ({ theme }) => ({
+          borderRadius: theme.spacing(1),
+        }),
       },
       defaultProps: {
         disableElevation: true,
         disableTouchRipple: true,
       },
     },
-    MuiButtonGroup: {
-      styleOverrides: {
-        grouped: {
-          borderColor: alpha(earth.ink, 0.18),
-        },
-      },
-    },
     MuiPopover: {
       styleOverrides: {
-        paper: {
-          border: `1px solid ${alpha(earth.ink, 0.14)}`,
+        paper: ({ theme }) => ({
+          borderWidth: theme.spacing(0.125),
+          borderStyle: "solid",
+          borderColor: alpha(earth.ink, 0.14),
           backgroundColor: earth.paperRaised,
-          boxShadow: `0 18px 44px ${alpha(earth.ink, 0.16)}`,
-        },
+          boxShadow: `0 ${theme.spacing(2.25)} ${theme.spacing(5.5)} ${alpha(earth.ink, 0.16)}`,
+        }),
       },
     },
     MuiTooltip: {
       styleOverrides: {
-        tooltip: {
+        tooltip: ({ theme }) => ({
           color: earth.parchment,
-          border: `1px solid ${alpha(earth.parchment, 0.12)}`,
+          borderWidth: theme.spacing(0.125),
+          borderStyle: "solid",
+          borderColor: alpha(earth.parchment, 0.12),
           backgroundColor: earth.ink,
-        },
+        }),
       },
     },
   },

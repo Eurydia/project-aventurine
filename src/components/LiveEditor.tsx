@@ -1,5 +1,5 @@
+import CodeRounded from "@mui/icons-material/CodeRounded";
 import DownloadRounded from "@mui/icons-material/DownloadRounded";
-import LinkRounded from "@mui/icons-material/LinkRounded";
 import SendRounded from "@mui/icons-material/SendRounded";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -11,25 +11,25 @@ import Popover from "@mui/material/Popover";
 import type { Theme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSnackbar } from "notistack";
-import { type FC, Fragment, useEffect, useState } from "react";
+import {
+  type FC,
+  Fragment,
+  type MouseEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import { AdaptiveButton } from "~/components/AdaptiveButton";
 import { DiagramPreview } from "~/components/DiagramPreview";
 import { StyledCodeEditor } from "~/components/StyledCodeEditor";
+import { SyntaxHelperDialog } from "~/components/SyntaxHelperDialog";
 import { lexerGetAllTokens, lexerInit } from "~/core/lexer";
-import { DiagramNode, parserGetAllNodes, parserInit } from "~/core/parser";
+import { parserGetAllNodes, parserInit } from "~/core/parser";
+import { generateUniqueLink } from "~/core/sharing";
 import { useEditorContent } from "~/hooks/useEditorContent";
 import { useExportDiagram } from "~/hooks/useExportDiagram";
 import { Layout } from "~/views/Layout";
-import { generateUniqueLink } from "../core/sharing";
 
-/**
- * The main component of the application.
- * It defines the primary interface of the application, as well as the main logic.
- *
- * The layout is controlled by the "Layout" component.
- * The "StyledCodeEditor" component provides text editor.
- * The "DiagramPreview" component provides the diagram preview.
- */
 export const LiveEditor: FC = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { exportJPEG, exportPNG, exportSVG } = useExportDiagram(
@@ -43,67 +43,66 @@ export const LiveEditor: FC = () => {
     theme.breakpoints.down("md"),
   );
 
-  const [nodes, setNodes] = useState<DiagramNode[]>([]);
   const [popoverExportMenuAnchor, setPopoverExportMenuAnchor] =
     useState<HTMLButtonElement | null>(null);
-  const [popoverShareMenuAnchor, setPopoverShareMenuAnchor] =
-    useState<HTMLButtonElement | null>(null);
+  const [syntaxHelperOpen, setSyntaxHelperOpen] = useState(false);
 
-  // Fires when the editor content changes
-  // Signals the lexer and parser to re-parse the content
-  // One issue is that the entire abstract syntax tree is re-parsed on every keystroke
-  // This is not ideal, but it is a simple solution for now
-  useEffect(() => {
+  const nodes = useMemo(() => {
     const tokens = lexerGetAllTokens(lexerInit(editorContent));
-    const nodes = parserGetAllNodes(parserInit(tokens));
-    setNodes(nodes);
+    return parserGetAllNodes(parserInit(tokens));
   }, [editorContent]);
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(
-      generateUniqueLink(editorContent, window.location.href),
-    );
-    enqueueSnackbar("Link copied to clipboard", {
-      variant: "info",
+  const handleCopyLink = useCallback(() => {
+    const shareUrl = generateUniqueLink(editorContent, window.location.href);
+    void navigator.clipboard.writeText(shareUrl);
+    enqueueSnackbar("Link copied!", {
+      variant: "success",
     });
-  };
-  const handleCopyEmbed = () => {
-    const srcURL = generateUniqueLink(editorContent, window.location.href);
-    const embed = `<iframe loading="lazy" height="auto" width="100%" src="${srcURL}" style="aspect-ratio: 16/10; border: none;"></iframe>`;
+  }, [editorContent, enqueueSnackbar]);
 
-    navigator.clipboard.writeText(embed);
-    enqueueSnackbar("Link copied to clipboard", {
-      variant: "info",
-    });
-  };
+  const handlePopoverExportMenuOpen = useCallback(
+    (event: MouseEvent<HTMLButtonElement>) => {
+      setPopoverExportMenuAnchor(event.currentTarget);
+    },
+    [],
+  );
 
-  const handlePopoverExportMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    setPopoverExportMenuAnchor(event.currentTarget);
-  };
+  const handlePopoverExportMenuClose = useCallback(() => {
+    setPopoverExportMenuAnchor(null);
+  }, []);
 
-  const handlePopoverShareMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    setPopoverShareMenuAnchor(event.currentTarget);
-  };
+  const handleSyntaxHelperOpen = useCallback(() => {
+    setSyntaxHelperOpen(true);
+  }, []);
 
-  const handleExportDiagram = async (
-    exportCallback: () => Promise<boolean>,
-  ) => {
-    exportCallback().then((success) => {
-      if (success) {
-        enqueueSnackbar("Diagram exported", {
-          variant: "info",
-        });
-        return;
-      }
-      enqueueSnackbar("Failed to export diagram", {
-        variant: "error",
-      });
-    });
-  };
+  const handleSyntaxHelperClose = useCallback(() => {
+    setSyntaxHelperOpen(false);
+  }, []);
+
+  const handleExportDiagram = useCallback(
+    async (exportCallback: () => Promise<boolean>) => {
+      const success = await exportCallback();
+      enqueueSnackbar(
+        success ? "Diagram exported" : "Failed to export diagram",
+        {
+          variant: success ? "info" : "error",
+        },
+      );
+    },
+    [enqueueSnackbar],
+  );
+
+  const handleExportJPEG = useCallback(() => {
+    void handleExportDiagram(exportJPEG);
+  }, [exportJPEG, handleExportDiagram]);
+
+  const handleExportPNG = useCallback(() => {
+    void handleExportDiagram(exportPNG);
+  }, [exportPNG, handleExportDiagram]);
+
+  const handleExportSVG = useCallback(() => {
+    void handleExportDiagram(exportSVG);
+  }, [exportSVG, handleExportDiagram]);
 
   return (
     <Fragment>
@@ -118,8 +117,14 @@ export const LiveEditor: FC = () => {
             />
             <AdaptiveButton
               collapsed={matchBreakpointXs}
+              startIcon={<CodeRounded />}
+              onClick={handleSyntaxHelperOpen}
+              children="SYNTAX"
+            />
+            <AdaptiveButton
+              collapsed={matchBreakpointXs}
               endIcon={<SendRounded />}
-              onClick={handlePopoverShareMenuOpen}
+              onClick={handleCopyLink}
               children="SHARE"
             />
           </ButtonGroup>
@@ -142,6 +147,10 @@ export const LiveEditor: FC = () => {
           />
         }
       />
+      <SyntaxHelperDialog
+        open={syntaxHelperOpen}
+        onClose={handleSyntaxHelperClose}
+      />
       <Popover
         anchorOrigin={{
           vertical: "bottom",
@@ -153,57 +162,27 @@ export const LiveEditor: FC = () => {
         }}
         anchorEl={popoverExportMenuAnchor}
         open={popoverExportMenuAnchor !== null}
-        onClose={() => setPopoverExportMenuAnchor(null)}
+        onClose={handlePopoverExportMenuClose}
       >
-        <Paper sx={{ padding: "1px" }}>
+        <Paper sx={{ padding: 0.125 }}>
           <MenuList>
-            <MenuItem onClick={() => handleExportDiagram(exportJPEG)}>
+            <MenuItem onClick={handleExportJPEG}>
               <ListItemIcon>
                 <DownloadRounded />
               </ListItemIcon>
               <ListItemText>Save as JPEG</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => handleExportDiagram(exportPNG)}>
+            <MenuItem onClick={handleExportPNG}>
               <ListItemIcon>
                 <DownloadRounded />
               </ListItemIcon>
               <ListItemText>Save as PNG</ListItemText>
             </MenuItem>
-            <MenuItem onClick={() => handleExportDiagram(exportSVG)}>
+            <MenuItem onClick={handleExportSVG}>
               <ListItemIcon>
                 <DownloadRounded />
               </ListItemIcon>
               <ListItemText>Save as SVG</ListItemText>
-            </MenuItem>
-          </MenuList>
-        </Paper>
-      </Popover>
-      <Popover
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        anchorEl={popoverShareMenuAnchor}
-        open={popoverShareMenuAnchor !== null}
-        onClose={() => setPopoverShareMenuAnchor(null)}
-      >
-        <Paper sx={{ padding: "1px" }}>
-          <MenuList>
-            <MenuItem onClick={handleCopyLink}>
-              <ListItemIcon>
-                <LinkRounded />
-              </ListItemIcon>
-              <ListItemText>Copy Link</ListItemText>
-            </MenuItem>
-            <MenuItem onClick={handleCopyEmbed}>
-              <ListItemIcon>
-                <LinkRounded />
-              </ListItemIcon>
-              <ListItemText>Copy Iframe Embed</ListItemText>
             </MenuItem>
           </MenuList>
         </Paper>

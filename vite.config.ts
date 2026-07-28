@@ -5,6 +5,9 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: "/project-aventurine/",
   plugins: [react()],
+  optimizeDeps: {
+    exclude: ["react-latex-next"],
+  },
   build: {
     rollupOptions: {
       output: {

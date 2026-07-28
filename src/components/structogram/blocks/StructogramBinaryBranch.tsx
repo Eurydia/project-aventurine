@@ -69,7 +69,6 @@ export const StructogramBinaryBranch: FC<{
           </Box>
           <Box
             sx={{
-              width: ifBlockWidth,
               height: "100%",
               display: "flex",
               alignItems: "center",
@@ -106,8 +105,6 @@ export const StructogramBinaryBranch: FC<{
               borderColor: "inherit",
               borderRightStyle: "solid",
               borderRightWidth: 2,
-              minWidth: "20%",
-              minHeight: "100%",
               flexGrow: 1,
               flexShrink: 1,
             }}
@@ -123,8 +120,7 @@ export const StructogramBinaryBranch: FC<{
               display: "flex",
               flexDirection: "column",
               borderColor: "inherit",
-              minWidth: "20%",
-              minHeight: "100%",
+              minWidth: "15%",
               flexGrow: 1,
               flexShrink: 1,
             }}

@@ -1,5 +1,7 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import type { FC, ReactNode } from "react";
 
@@ -11,78 +13,47 @@ export const WorkspaceToolbar: FC<{
   const { actions, onToggleCode, toggleCodeLabel } = props;
 
   return (
-    <Box
-      component="header"
-      sx={(theme) => ({
-        minWidth: 0,
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) auto auto",
-        alignItems: "center",
-        columnGap: theme.spacing(2),
-        rowGap: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
-        [theme.breakpoints.down("sm")]: {
-          gridTemplateColumns: "minmax(0, 1fr) auto",
-          paddingBottom: theme.spacing(1.5),
-        },
-      })}
-    >
-      <Box sx={{ minWidth: 0 }}>
-        <Typography component="h1" variant="overline" sx={{ lineHeight: 1.2 }}>
-          Structogram
-        </Typography>
-        <Typography
-          component="p"
-          variant="caption"
-          color="text.secondary"
-          sx={(theme) => ({
-            [theme.breakpoints.down("sm")]: {
-              display: "none",
-            },
-          })}
-        >
-          Visual code workbench
-        </Typography>
-      </Box>
-
-      <Box
-        component="nav"
-        aria-label="Workspace controls"
-        sx={(theme) => ({
-          [theme.breakpoints.down("sm")]: {
-            width: "100%",
-            gridColumn: "1 / -1",
-            gridRow: 2,
-          },
-        })}
+    <Box component="header">
+      <Grid
+        container
+        spacing={2}
+        sx={{
+          alignItems: "center",
+        }}
       >
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={onToggleCode}
-          sx={(theme) => ({
-            [theme.breakpoints.down("sm")]: {
-              width: "100%",
-            },
-          })}
-        >
-          {toggleCodeLabel}
-        </Button>
-      </Box>
+        <Grid size="grow">
+          <Stack spacing={1}>
+            <Typography
+              component="h1"
+              variant="overline"
+              sx={{ lineHeight: 1.2 }}
+            >
+              {`Online Structogram Builder`}
+            </Typography>
+            <Typography variant="subtitle2" color="textSecondary">
+              {`Beautiful structograms from code.`}
+            </Typography>
+          </Stack>
+        </Grid>
 
-      <Box
-        sx={(theme) => ({
-          display: "flex",
-          justifyContent: "flex-end",
-          [theme.breakpoints.down("sm")]: {
-            gridColumn: 2,
-            gridRow: 1,
-          },
-        })}
-      >
-        {actions}
-      </Box>
+        <Grid
+          size={{
+            xs: 12,
+            sm: "auto",
+          }}
+        >
+          <Stack
+            spacing={2}
+            direction={"row"}
+            sx={{ justifyContent: { xs: "space-between", sm: "flex-start" } }}
+          >
+            <Button variant="outlined" onClick={onToggleCode}>
+              {toggleCodeLabel}
+            </Button>
+            {actions}
+          </Stack>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

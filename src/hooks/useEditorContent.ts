@@ -1,16 +1,5 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-/**
- * The "useEditorContent" hook provides functions for controlling the editor content.
- * It initializes and manages the state of the editor content and saves it to local storage.
- *
- * Based on the the given URL, the hook checks if the "content" parameter is present.
- * If it is, the hook sets the editor content to the value of the "content" parameter and sync local storage to the new content.
- * If the "content" parameter is not present, the hook checks if there is a saved content in local storage.
- * If there is, the hook sets the editor content to the saved content.
- *
- * As such, content from the URL takes precedence over content from local storage.
- */
 export const useEditorContent = (hrefURL: string, localStorageKey: string) => {
   const [editorContent, setEditorContentInner] = useState(() => {
     const url = new URL(hrefURL);
@@ -29,13 +18,22 @@ export const useEditorContent = (hrefURL: string, localStorageKey: string) => {
         return savedContent;
       }
     }
-    return "Hello World;";
+    return `\
+// PROCESSES      :   #; <- end the line with a semicolon
+// IF_ELSE        :   if (#) { # } else { # } 
+// FOR_LOOP       :   for (#) { # } 
+// WHILE_LOOP     :   while (#) { # }
+// DO_WHILE_LOOP  :   do { # } while (#);
+// FUNCTION       :   # #(#) {} Like this -> int func_name(int x, int y) {}`;
   });
 
-  const setEditorContent = (content: string) => {
-    setEditorContentInner(content);
-    window.localStorage.setItem(localStorageKey, JSON.stringify(content));
-  };
+  const setEditorContent = useCallback(
+    (content: string) => {
+      setEditorContentInner(content);
+      window.localStorage.setItem(localStorageKey, JSON.stringify(content));
+    },
+    [localStorageKey],
+  );
 
   return { editorContent, setEditorContent };
 };

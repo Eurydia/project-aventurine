@@ -111,15 +111,15 @@ export const LiveEditor: FC = () => {
           <ButtonGroup disableElevation variant="outlined">
             <AdaptiveButton
               collapsed={matchBreakpointXs}
-              startIcon={<DownloadRounded />}
-              onClick={handlePopoverExportMenuOpen}
-              children="EXPORT"
-            />
-            <AdaptiveButton
-              collapsed={matchBreakpointXs}
               startIcon={<CodeRounded />}
               onClick={handleSyntaxHelperOpen}
               children="SYNTAX"
+            />
+            <AdaptiveButton
+              collapsed={matchBreakpointXs}
+              startIcon={<DownloadRounded />}
+              onClick={handlePopoverExportMenuOpen}
+              children="EXPORT"
             />
             <AdaptiveButton
               collapsed={matchBreakpointXs}

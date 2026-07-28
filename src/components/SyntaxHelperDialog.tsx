@@ -108,10 +108,7 @@ const syntaxItems = [
     description:
       "Dollar-delimited LaTeX can appear anywhere inside free-form process text.",
     pattern: "# = $...$;",
-    examples: [
-      "formula = $x^2 + y^2$;",
-      "sequence = $a_1 + a_2 + a_3$;",
-    ],
+    examples: ["formula = $x^2 + y^2$;", "sequence = $a_1 + a_2 + a_3$;"],
   },
 ] as const;
 
@@ -122,7 +119,7 @@ export const SyntaxHelperDialog: FC<{
   const { onClose, open } = props;
 
   return (
-    <Dialog fullWidth maxWidth="md" open={open} onClose={onClose}>
+    <Dialog fullWidth maxWidth="md" open={open} onClose={onClose} scroll="body">
       <DialogTitle>Syntax helper</DialogTitle>
       <DialogContent dividers>
         <Stack spacing={4}>
@@ -198,8 +195,6 @@ export const SyntaxHelperDialog: FC<{
                           color: theme.palette.text.primary,
                           backgroundColor: theme.palette.action.hover,
                           fontFamily: theme.typography.fontFamily,
-                          fontSize: theme.typography.body2.fontSize,
-                          lineHeight: theme.typography.body2.lineHeight,
                         })}
                       >
                         {example}

@@ -1,48 +1,44 @@
 import { FC, Fragment, ReactNode } from "react";
 import { DiagramToken } from "~/core/lexer";
 import { DiagramNode, DiagramNodeKind } from "~/core/parser";
-import { StructogramBinaryBranch } from "./diagram/blocks/StructogramBinaryBranch";
-import { StructogramError } from "./diagram/blocks/StructogramError";
-import { StructogramFunction } from "./diagram/blocks/StructogramFunction";
-import { StructogramLoopFirst } from "./diagram/blocks/StructogramLoopFirst";
-import { StructogramLoopLast } from "./diagram/blocks/StructogramLoopLast";
-import { StructogramProcess } from "./diagram/blocks/StructogramProcess";
+import { StructogramBinaryBranch } from "./structogram/blocks/StructogramBinaryBranch";
+import { StructogramError } from "./structogram/blocks/StructogramError";
+import { StructogramFunction } from "./structogram/blocks/StructogramFunction";
+import { StructogramLoopFirst } from "./structogram/blocks/StructogramLoopFirst";
+import { StructogramLoopLast } from "./structogram/blocks/StructogramLoopLast";
+import { StructogramProcess } from "./structogram/blocks/StructogramProcess";
 
-type DiagramProcessProps = {
+const DiagramProcess: FC<{
   bodyTokens?: DiagramToken[];
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
-};
-const DiagramProcess: FC<DiagramProcessProps> = (props) => {
-  const { bodyTokens, ...rest } = props;
-
-  let bodyText: string | undefined = undefined;
-  if (bodyTokens !== undefined) {
-    bodyText = bodyTokens
-      .map((token) => token.text)
-      .join("")
-      .trim();
-    if (bodyText.length === 0) {
-      bodyText = undefined;
-    }
-  }
-
-  return <StructogramProcess {...rest}>{bodyText}</StructogramProcess>;
+  border: Partial<{
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }>;
+}> = (props) => {
+  return (
+    <StructogramProcess border={props.border}>
+      {props.bodyTokens
+        ?.map((token) => token.text)
+        .join("")
+        .trim() || undefined}
+    </StructogramProcess>
+  );
 };
 
-type DiagramLoopFirstProps = {
+export const DiagramLoopFirst: FC<{
   conditionTokens?: DiagramToken[];
   body: DiagramNode[];
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
-};
-export const DiagramLoopFirst: FC<DiagramLoopFirstProps> = (props) => {
+  border: Partial<{
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }>;
+}> = (props) => {
   const { conditionTokens, body, ...rest } = props;
 
   let conditionText: string | undefined = undefined;
@@ -53,11 +49,15 @@ export const DiagramLoopFirst: FC<DiagramLoopFirstProps> = (props) => {
       .trim();
   }
   let bodyNode: ReactNode | ReactNode[] = (
-    <DiagramProcess borderTop borderLeft />
+    <DiagramProcess border={{ top: true, left: true }} />
   );
   if (body.length > 0) {
     bodyNode = body.map((subnode, index) => (
-      <Diagram key={`subnode-${index}`} borderTop borderLeft node={subnode} />
+      <Diagram
+        key={`subnode-${index}`}
+        border={{ top: true, left: true }}
+        node={subnode}
+      />
     ));
   }
 
@@ -72,10 +72,12 @@ type DiagramLoopLastProps = {
   conditionTokens?: DiagramToken[];
   body: DiagramNode[];
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
+  border: Partial<{
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }>;
 };
 export const DiagramLoopLast: FC<DiagramLoopLastProps> = (props) => {
   const { conditionTokens, body, ...rest } = props;
@@ -89,15 +91,14 @@ export const DiagramLoopLast: FC<DiagramLoopLastProps> = (props) => {
   }
 
   let bodyNode: ReactNode | ReactNode[] = (
-    <DiagramProcess borderBottom borderLeft />
+    <DiagramProcess border={{ bottom: true, left: true }} />
   );
   if (body.length > 0) {
     bodyNode = body.map((subnode, index) => (
       <Diagram
         key={`subnode-${index}`}
         node={subnode}
-        borderBottom
-        borderLeft
+        border={{ bottom: true, left: true }}
       />
     ));
   }
@@ -113,10 +114,12 @@ type DiagramIfElseProps = {
   bodyIf: DiagramNode[];
   bodyElse: DiagramNode[];
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
+  border: Partial<{
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }>;
 };
 export const DiagramIfElse: FC<DiagramIfElseProps> = (props) => {
   const { conditionTokens, bodyIf, bodyElse, ...rest } = props;
@@ -128,17 +131,21 @@ export const DiagramIfElse: FC<DiagramIfElseProps> = (props) => {
       .join("")
       .trim();
   }
-  let bodyNodeIf: ReactNode | ReactNode[] = <DiagramProcess borderTop />;
+  let bodyNodeIf: ReactNode | ReactNode[] = (
+    <DiagramProcess border={{ top: true }} />
+  );
   if (bodyIf.length > 0) {
     bodyNodeIf = bodyIf.map((subnode, index) => (
-      <Diagram key={`index-${index}`} borderTop node={subnode} />
+      <Diagram key={`index-${index}`} border={{ top: true }} node={subnode} />
     ));
   }
 
-  let bodyNodeElse: ReactNode | ReactNode[] = <DiagramProcess borderTop />;
+  let bodyNodeElse: ReactNode | ReactNode[] = (
+    <DiagramProcess border={{ top: true }} />
+  );
   if (bodyElse.length > 0) {
     bodyNodeElse = bodyElse.map((subnode, index) => (
-      <Diagram key={`index-${index}`} borderTop node={subnode} />
+      <Diagram key={`index-${index}`} border={{ top: true }} node={subnode} />
     ));
   }
 
@@ -156,10 +163,12 @@ type DiagramFunctionProps = {
   declarationTokens: DiagramToken[];
   body: DiagramNode[];
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
+  border: Partial<{
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }>;
 };
 const DiagramFunction: FC<DiagramFunctionProps> = (props) => {
   const { declarationTokens, body, ...rest } = props;
@@ -173,16 +182,14 @@ const DiagramFunction: FC<DiagramFunctionProps> = (props) => {
   }
 
   let bodyNode: ReactNode | ReactNode[] = (
-    <DiagramProcess borderTop borderLeft borderRight />
+    <DiagramProcess border={{ top: true, left: true, right: true }} />
   );
   if (body.length > 0) {
     bodyNode = body.map((subnode, index) => (
       <Diagram
         key={`subnode-${index}`}
         node={subnode}
-        borderTop
-        borderLeft
-        borderRight
+        border={{ top: true, left: true, right: true }}
       />
     ));
   }
@@ -197,10 +204,12 @@ const DiagramFunction: FC<DiagramFunctionProps> = (props) => {
 type DiagramProps = {
   node: DiagramNode;
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
+  border: Partial<{
+    top: boolean;
+    bottom: boolean;
+    left: boolean;
+    right: boolean;
+  }>;
 };
 export const Diagram: FC<DiagramProps> = (props) => {
   const { node, ...rest } = props;

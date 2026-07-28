@@ -31,10 +31,12 @@ export const DiagramPreview: FC<DiagramPreviewProps> = (props): ReactNode => {
       <Diagram
         key={`top-level-node-${index}`}
         node={node}
-        borderLeft
-        borderTop
-        borderRight
-        borderBottom={index === nodes.length - 1}
+        border={{
+          left: true,
+          right: true,
+          top: true,
+          bottom: index === nodes.length - 1,
+        }}
       />
     ));
   }

@@ -1,13 +1,7 @@
-import { Box, SxProps, styled, Typography } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 import { FC, ReactNode } from "react";
 import { DiagramNode } from "~/core/parser";
 import { Diagram } from "./Diagram";
-
-const StyledBox = styled(Box)(({ theme }) => ({
-  maxWidth: "640px",
-  backgroundColor: theme.palette.common.white,
-  borderColor: theme.palette.text.primary,
-}));
 
 /**
  * This component is a preview of the diagram.
@@ -19,31 +13,35 @@ type DiagramPreviewProps = {
   boxProps: SxProps;
 };
 export const DiagramPreview: FC<DiagramPreviewProps> = (props): ReactNode => {
-  const { nodes, id, boxProps } = props;
-
-  // Empty state of the preview
-  let component: ReactNode | ReactNode[] = (
-    <Typography sx={{ fontStyle: "italic" }}>Nothing to display.</Typography>
-  );
-  // If there are nodes, render them
-  if (nodes.length > 0) {
-    component = nodes.map((node, index) => (
-      <Diagram
-        key={`top-level-node-${index}`}
-        node={node}
-        border={{
-          left: true,
-          right: true,
-          top: true,
-          bottom: index === nodes.length - 1,
-        }}
-      />
-    ));
-  }
-
   return (
-    <Box sx={boxProps}>
-      <StyledBox id={id} children={component} />
+    <Box sx={props.boxProps}>
+      <Box
+        id={props.id}
+        sx={(t) => ({
+          maxWidth: "640px",
+          backgroundColor: t.palette.common.white,
+          borderColor: t.palette.text.primary,
+        })}
+      >
+        {props.nodes.length === 0 ? (
+          <Typography sx={{ fontStyle: "italic" }}>
+            Nothing to display.
+          </Typography>
+        ) : (
+          props.nodes.map((node, index) => (
+            <Diagram
+              key={`top-level-node-${index}`}
+              node={node}
+              border={{
+                left: true,
+                right: true,
+                top: true,
+                bottom: index === props.nodes.length - 1,
+              }}
+            />
+          ))
+        )}
+      </Box>
     </Box>
   );
 };

@@ -32,7 +32,7 @@ export const StructogramBinaryBranch: FC<{
   }, [ifBlockRef.current?.getBoundingClientRect()]);
 
   return (
-    <StructogramComponentWrapper {...props.border}>
+    <StructogramComponentWrapper border={props.border}>
       <Box
         sx={{
           width: "100%",
@@ -44,7 +44,7 @@ export const StructogramBinaryBranch: FC<{
         <StructogramComponentText sx={{ textAlign: "center" }}>
           {props.condition}
         </StructogramComponentText>
-        <Stack>
+        <Stack direction={"row"}>
           <Box
             sx={{
               width: ifBlockWidth,
@@ -56,7 +56,7 @@ export const StructogramBinaryBranch: FC<{
             }}
           >
             <StructogramComponentText
-              shadow
+              showShadow
               sx={{
                 wordBreak: "keep-all",
                 zIndex: 2,
@@ -79,7 +79,7 @@ export const StructogramBinaryBranch: FC<{
           >
             <LineBottomLeftTopRight />
             <StructogramComponentText
-              shadow
+              showShadow
               sx={{
                 wordBreak: "keep-all",
                 zIndex: 2,
@@ -122,8 +122,6 @@ export const StructogramBinaryBranch: FC<{
               display: "flex",
               flexDirection: "column",
               borderColor: "inherit",
-              borderRightStyle: "solid",
-              borderRightWidth: 2,
               minWidth: "20%",
               minHeight: "100%",
               flexGrow: 1,

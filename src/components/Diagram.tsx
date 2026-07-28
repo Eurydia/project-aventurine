@@ -109,7 +109,7 @@ export const DiagramLoopLast: FC<DiagramLoopLastProps> = (props) => {
   );
 };
 
-type DiagramIfElseProps = {
+export const DiagramIfElse: FC<{
   conditionTokens?: DiagramToken[];
   bodyIf: DiagramNode[];
   bodyElse: DiagramNode[];
@@ -120,41 +120,42 @@ type DiagramIfElseProps = {
     left: boolean;
     right: boolean;
   }>;
-};
-export const DiagramIfElse: FC<DiagramIfElseProps> = (props) => {
-  const { conditionTokens, bodyIf, bodyElse, ...rest } = props;
-
-  let conditionText: string | undefined;
-  if (conditionTokens !== undefined && conditionTokens.length > 0) {
-    conditionText = conditionTokens
-      .map((token) => token.text)
-      .join("")
-      .trim();
-  }
-  let bodyNodeIf: ReactNode | ReactNode[] = (
-    <DiagramProcess border={{ top: true }} />
-  );
-  if (bodyIf.length > 0) {
-    bodyNodeIf = bodyIf.map((subnode, index) => (
-      <Diagram key={`index-${index}`} border={{ top: true }} node={subnode} />
-    ));
-  }
-
-  let bodyNodeElse: ReactNode | ReactNode[] = (
-    <DiagramProcess border={{ top: true }} />
-  );
-  if (bodyElse.length > 0) {
-    bodyNodeElse = bodyElse.map((subnode, index) => (
-      <Diagram key={`index-${index}`} border={{ top: true }} node={subnode} />
-    ));
-  }
-
+}> = (props) => {
   return (
     <StructogramBinaryBranch
-      {...rest}
-      condition={conditionText}
-      childrenIf={bodyNodeIf}
-      childrenElse={bodyNodeElse}
+      border={props.border}
+      condition={
+        props.conditionTokens
+          ?.map((token) => token.text)
+          .join("")
+          .trim() || undefined
+      }
+      childrenIf={
+        props.bodyIf.length === 0 ? (
+          <DiagramProcess border={{ top: true }} />
+        ) : (
+          props.bodyIf.map((subnode, index) => (
+            <Diagram
+              key={`index-${index}`}
+              border={{ top: true }}
+              node={subnode}
+            />
+          ))
+        )
+      }
+      childrenElse={
+        props.bodyElse.length === 0 ? (
+          <DiagramProcess border={{ top: true }} />
+        ) : (
+          props.bodyElse.map((subnode, index) => (
+            <Diagram
+              key={`index-${index}`}
+              border={{ top: true }}
+              node={subnode}
+            />
+          ))
+        )
+      }
     />
   );
 };
@@ -201,7 +202,7 @@ const DiagramFunction: FC<DiagramFunctionProps> = (props) => {
   );
 };
 
-type DiagramProps = {
+export const Diagram: FC<{
   node: DiagramNode;
 
   border: Partial<{
@@ -210,57 +211,57 @@ type DiagramProps = {
     left: boolean;
     right: boolean;
   }>;
-};
-export const Diagram: FC<DiagramProps> = (props) => {
-  const { node, ...rest } = props;
-
-  switch (node.kind) {
+}> = (props) => {
+  switch (props.node.kind) {
     case DiagramNodeKind.ERROR:
       return (
         <StructogramError
-          {...rest}
-          caretOffset={node.caretOffset}
-          context={node.context}
-          reason={node.reason}
-          lineNumber={node.lineNumber}
-          charNumber={node.charNumber}
+          border={props.border}
+          caretOffset={props.node.caretOffset}
+          context={props.node.context}
+          reason={props.node.reason}
+          lineNumber={props.node.lineNumber}
+          charNumber={props.node.charNumber}
         />
       );
     case DiagramNodeKind.FUNCTION:
       return (
         <DiagramFunction
-          declarationTokens={node.declaration}
-          body={node.body}
-          {...rest}
+          declarationTokens={props.node.declaration}
+          body={props.node.body}
+          border={props.border}
         />
       );
     case DiagramNodeKind.LOOP_FIRST:
       return (
         <DiagramLoopFirst
-          {...rest}
-          conditionTokens={node.condition}
-          body={node.body}
+          border={props.border}
+          conditionTokens={props.node.condition}
+          body={props.node.body}
         />
       );
     case DiagramNodeKind.LOOP_LAST:
       return (
         <DiagramLoopLast
-          {...rest}
-          conditionTokens={node.condition}
-          body={node.body}
+          border={props.border}
+          conditionTokens={props.node.condition}
+          body={props.node.body}
         />
       );
     case DiagramNodeKind.IF_ELSE:
       return (
         <DiagramIfElse
-          {...rest}
-          conditionTokens={node.condition}
-          bodyIf={node.bodyIf}
-          bodyElse={node.bodyElse}
+          border={props.border}
+          conditionTokens={props.node.condition}
+          bodyIf={props.node.bodyIf}
+          bodyElse={props.node.bodyElse}
         />
       );
     case DiagramNodeKind.PROCESS:
-      return <DiagramProcess {...rest} bodyTokens={node.body} />;
+      return (
+        <DiagramProcess border={props.border} bodyTokens={props.node.body} />
+      );
+    default:
+      return <Fragment />;
   }
-  return <Fragment />;
 };

@@ -16,45 +16,31 @@ import { useState } from "react";
  *
  * As such, content from the URL takes precedence over content from local storage.
  */
-export const useEditorContent = (
-	hrefURL: string,
-	localStorageKey: string,
-) => {
-	const [editorContent, setEditorContentInner] =
-		useState(() => {
-			const url = new URL(hrefURL);
+export const useEditorContent = (hrefURL: string, localStorageKey: string) => {
+  const [editorContent, setEditorContentInner] = useState(() => {
+    const url = new URL(hrefURL);
 
-			const content =
-				url.searchParams.get("content");
-			if (content !== null) {
-				window.localStorage.setItem(
-					localStorageKey,
-					content,
-				);
-				return content;
-			}
+    const content = url.searchParams.get("content");
+    if (content !== null) {
+      window.localStorage.setItem(localStorageKey, content);
+      return content;
+    }
 
-			const savedContent =
-				window.localStorage.getItem(
-					localStorageKey,
-				);
-			if (savedContent !== null) {
-				try {
-					return JSON.parse(savedContent);
-				} catch {
-					return savedContent;
-				}
-			}
-			return "Hello World;";
-		});
+    const savedContent = window.localStorage.getItem(localStorageKey);
+    if (savedContent !== null) {
+      try {
+        return JSON.parse(savedContent);
+      } catch {
+        return savedContent;
+      }
+    }
+    return "Hello World;";
+  });
 
-	const setEditorContent = (content: string) => {
-		setEditorContentInner(content);
-		window.localStorage.setItem(
-			localStorageKey,
-			JSON.stringify(content),
-		);
-	};
+  const setEditorContent = (content: string) => {
+    setEditorContentInner(content);
+    window.localStorage.setItem(localStorageKey, JSON.stringify(content));
+  };
 
-	return { editorContent, setEditorContent };
+  return { editorContent, setEditorContent };
 };

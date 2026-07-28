@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import { FC, PropsWithChildren } from "react";
 
 export const StructogramComponentWrapper: FC<

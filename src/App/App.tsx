@@ -1,6 +1,7 @@
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import { SnackbarProvider } from "notistack";
-import { FC, Fragment } from "react";
+import { type FC, Fragment } from "react";
 import { LiveEditor } from "~/components/LiveEditor";
 import { themeDark } from "./theme";
 

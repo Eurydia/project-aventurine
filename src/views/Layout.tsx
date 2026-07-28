@@ -1,108 +1,101 @@
-import { LaunchRounded } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Grid,
-  Paper,
-  styled,
-  Theme,
-  useMediaQuery,
-} from "@mui/material";
-import { FC, ReactNode, useMemo, useRef, useState } from "react";
-import { getPreviewState } from "~/components/LiveEditor/helper";
-
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(1),
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-between",
-}));
-const StyledBox = styled(Box)({
-  overflow: "auto",
-});
-const docsButton = (
-  <Button
-    href="https://eurydia.github.io/project-structogram-builder-online-docs/"
-    component="a"
-    target="_blank"
-    endIcon={<LaunchRounded />}
-    children="docs"
-  />
-);
+import Box from "@mui/material/Box";
+import { alpha, type Theme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { type FC, type ReactNode, useState } from "react";
+import { getPreviewState } from "~/core/sharing";
+import { WorkspacePanel } from "./WorkspacePanel";
+import { WorkspaceToolbar } from "./WorkspaceToolbar";
 
 /**
- * This component defines the layout and its behavior for the "LiveEditor" component.
- *
- * There are behaviors for different screen sizes.
- * At small screen sizes, both panels are not displayed side by side.
- * Instead, a panel takes up the entire screen and the other panel is hidden.
- * At medium and large screen sizes, the both panels are displayed side by side.
+ * Defines the responsive workbench around the editor and diagram output.
+ * The provided editor and output slots are treated as opaque content.
  */
-type LayoutProps = {
+export const Layout: FC<{
   slotAppBar: ReactNode;
   slotPanelLeft: ReactNode;
   slotPanelRight: ReactNode;
-};
-export const Layout: FC<LayoutProps> = (props) => {
+}> = (props) => {
   const { slotAppBar, slotPanelLeft, slotPanelRight } = props;
-
-  // Prepare the app bar reference
-  const appBarRef = useRef<HTMLDivElement | null>(null);
-
-  // Prepare the app bar static height
-  // This is used to calculate the height of the left and right panels in the layout
-  // Without a fixed height, the panels have unpredictable behavior
-  let appBarHeight = 0;
-  if (appBarRef.current !== null) {
-    appBarHeight = appBarRef.current.getBoundingClientRect().height;
-  }
-
-  // The left panel can be hidden or shown
-  // The initial state is determined by the query parameter in the URL
   const [leftPanelOpen, setLeftPanelOpen] = useState(
     getPreviewState(window.location.href),
   );
-
-  // Fires when the "Show Code" and "Hide Code" button is clicked
-  const handlePreviewToggle = () => {
-    setLeftPanelOpen((prev) => !prev);
-  };
-
-  // The breakpoint for the extra small screen
   const matchBreakpointXs = useMediaQuery<Theme>((theme) =>
     theme.breakpoints.down("md"),
   );
 
-  const panelHeight = useMemo(
-    () => `calc(100vh - ${appBarHeight}px)`,
-    [appBarHeight],
-  );
-
-  const toggleCodeMsg = leftPanelOpen ? "Show code" : "Hide code";
-
-  const rightPanelVisible =
-    matchBreakpointXs && !leftPanelOpen ? "none" : undefined;
-
-  const leftPanelVisible = leftPanelOpen ? "none" : undefined;
+  const showSinglePanel = leftPanelOpen || matchBreakpointXs;
+  const rightPanelDisplay =
+    matchBreakpointXs && !leftPanelOpen ? "none" : "flex";
+  const leftPanelDisplay = leftPanelOpen ? "none" : "flex";
 
   return (
-    <StyledBox>
-      <StyledPaper ref={appBarRef} square elevation={4}>
-        <ButtonGroup disableElevation variant="outlined">
-          <Button onClick={handlePreviewToggle} children={toggleCodeMsg} />
-          {docsButton}
-        </ButtonGroup>
-        {slotAppBar}
-      </StyledPaper>
-      <Grid container>
-        <Grid size={{ xs: 12, lg: 6 }} sx={{ display: leftPanelVisible }}>
-          <StyledBox sx={{ height: panelHeight }}>{slotPanelLeft}</StyledBox>
-        </Grid>
-        <Grid size={"grow"} sx={{ display: rightPanelVisible }}>
-          <StyledBox sx={{ height: panelHeight }}>{slotPanelRight}</StyledBox>
-        </Grid>
-      </Grid>
-    </StyledBox>
+    <Box
+      sx={(theme) => {
+        const gridColor = alpha(theme.palette.primary.main, 0.055);
+
+        return {
+          height: "100dvh",
+          minHeight: 0,
+          display: "grid",
+          gridTemplateRows: "auto minmax(0, 1fr)",
+          gap: "clamp(20px, 2.4vw, 36px)",
+          padding: "clamp(20px, 3vw, 48px)",
+          overflow: "hidden",
+          backgroundColor: theme.palette.background.default,
+          backgroundImage: [
+            `linear-gradient(${gridColor} 1px, transparent 1px)`,
+            `linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`,
+          ].join(", "),
+          backgroundSize: [
+            `${theme.spacing(4)} ${theme.spacing(4)}`,
+            `${theme.spacing(4)} ${theme.spacing(4)}`,
+          ].join(", "),
+          [theme.breakpoints.down("sm")]: {
+            gap: theme.spacing(2),
+            padding: theme.spacing(2),
+          },
+        };
+      }}
+    >
+      <WorkspaceToolbar
+        actions={slotAppBar}
+        onToggleCode={() => setLeftPanelOpen((previous) => !previous)}
+        toggleCodeLabel={leftPanelOpen ? "Show code" : "Hide code"}
+      />
+
+      <Box
+        component="main"
+        sx={(theme) => ({
+          minWidth: 0,
+          minHeight: 0,
+          display: "grid",
+          gridTemplateColumns: showSinglePanel
+            ? "minmax(0, 1fr)"
+            : "repeat(2, minmax(0, 1fr))",
+          gap: "clamp(20px, 2.4vw, 36px)",
+          [theme.breakpoints.down("sm")]: {
+            gap: theme.spacing(2),
+          },
+        })}
+      >
+        <WorkspacePanel
+          ariaLabel="Code editor panel"
+          display={leftPanelDisplay}
+          label="Code panel"
+          status="Input"
+        >
+          {slotPanelLeft}
+        </WorkspacePanel>
+
+        <WorkspacePanel
+          ariaLabel="Diagram output panel"
+          display={rightPanelDisplay}
+          label="Diagram output"
+          status="Live preview"
+        >
+          {slotPanelRight}
+        </WorkspacePanel>
+      </Box>
+    </Box>
   );
 };

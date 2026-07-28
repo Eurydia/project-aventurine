@@ -1,12 +1,11 @@
 import ReactCodeMirror, { EditorView } from "@uiw/react-codemirror";
-import { FC } from "react";
+import type { FC } from "react";
 import "./styles.css";
 
-type StyledCodeEditorProps = {
+export const StyledCodeEditor: FC<{
   value: string;
   onValueChange: (value: string) => void;
-};
-export const StyledCodeEditor: FC<StyledCodeEditorProps> = (props) => {
+}> = (props) => {
   const { value, onValueChange } = props;
 
   return (

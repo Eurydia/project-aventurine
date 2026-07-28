@@ -1,4 +1,6 @@
-import { Typography, TypographyProps } from "@mui/material";
+import Typography, {
+  type TypographyProps,
+} from "@mui/material/Typography";
 import { FC } from "react";
 import Latex from "react-latex-next";
 

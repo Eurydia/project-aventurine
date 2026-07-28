@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { StructogramComponentText } from "./StructogramComponentText";
 import { StructogramComponentWrapper } from "./StructogramComponentWrapper";
-import { ChildCare } from "@mui/icons-material";
 
 export const StructogramProcess: FC<{
   children?: string;

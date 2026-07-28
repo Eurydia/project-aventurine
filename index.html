@@ -1,138 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-	<head>
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/project-structogram-builder-online/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="/project-structogram-builder-online/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="/project-structogram-builder-online/favicon-16x16.png"
-		/>
-		<link
-			rel="icon"
-			type="image/x-icon"
-			href="/project-structogram-builder-online/favicon.ico"
-		/>
-		<link
-			rel="manifest"
-			href="/project-structogram-builder-online/site.webmanifest"
-		/>
-		<meta charset="UTF-8" />
-		<meta
-			name="description"
-			content="A web application that builds Nassi-Shneiderman diagram from
-			a piece of code."
-		/>
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0"
-		/>
-		<meta
-			name="theme-color"
-			content="#317EFB"
-		/>
-		<meta
-			name="author"
-			content="Thanakorn Phuttharaksa"
-		/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-		<!-- HTML Meta Tags -->
-		<title>
-			Nassi-Shneiderman Diagram Builder
-		</title>
-		<meta
-			name="description"
-			content="Build, export, and share Nassi-Shneiderman diagrams from C-like code snippets."
-		/>
+    <title>Build Structograms from C-style code | Project Aventurine</title>
+    <meta
+      name="description"
+      content="Create, preview, export, and share Nassi–Shneiderman diagrams from C-like code with LaTeX math rendering directly in your browser."
+    />
+    <meta name="author" content="Thanakorn Phuttharaksa" />
+    <meta name="theme-color" content="#eee5d6" />
+    <link
+      rel="canonical"
+      href="https://eurydia.github.io/project-aventurine/"
+    />
 
-		<!-- Facebook Meta Tags -->
-		<meta
-			property="og:url"
-			content="https://eurydia.github.io/project-nassi-shneiderman-diagram-builder-online/"
-		/>
-		<meta
-			property="og:type"
-			content="website"
-		/>
-		<meta
-			property="og:title"
-			content="Online Nassi-Shneiderman diagram builder"
-		/>
-		<meta
-			property="og:description"
-			content="Build, export, and share Nassi-Shneiderman diagrams from C-like code snippets."
-		/>
-		<meta
-			property="og:image"
-			content="https://ogcdn.net/e4b8c678-7bd5-445d-ba03-bfaad510c686/v3/eurydia.github.io/Online%20Nassi-Shneiderman%20diagram%20builder/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fdocuments%2F1d8c879f-ad4c-40f1-9284-2a0fa76b0f44.png%3Ftoken%3DAyca8CYF7H22g-0BYdy9YwltRCQREepn798RE8DIwiA%26height%3D774%26width%3D1200%26expires%3D33241928460/og.png"
-		/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/project-aventurine/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/project-aventurine/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/project-aventurine/favicon-16x16.png" />
+    <link rel="icon" type="image/x-icon" href="/project-aventurine/favicon.ico" />
+    <link rel="manifest" href="/project-aventurine/site.webmanifest" />
 
-		<!-- Twitter Meta Tags -->
-		<meta
-			name="twitter:card"
-			content="summary_large_image"
-		/>
-		<meta
-			property="twitter:domain"
-			content="eurydia.github.io"
-		/>
-		<meta
-			property="twitter:url"
-			content="https://eurydia.github.io/project-nassi-shneiderman-diagram-builder-online/"
-		/>
-		<meta
-			name="twitter:title"
-			content="Online Nassi-Shneiderman diagram builder"
-		/>
-		<meta
-			name="twitter:description"
-			content="Build, export, and share Nassi-Shneiderman diagrams from C-like code snippets."
-		/>
-		<meta
-			name="twitter:image"
-			content="https://ogcdn.net/e4b8c678-7bd5-445d-ba03-bfaad510c686/v3/eurydia.github.io/Online%20Nassi-Shneiderman%20diagram%20builder/https%3A%2F%2Fopengraph.b-cdn.net%2Fproduction%2Fdocuments%2F1d8c879f-ad4c-40f1-9284-2a0fa76b0f44.png%3Ftoken%3DAyca8CYF7H22g-0BYdy9YwltRCQREepn798RE8DIwiA%26height%3D774%26width%3D1200%26expires%3D33241928460/og.png"
-		/>
-		<title>Structogram Builder</title>
-		<script type="module" crossorigin src="/project-structogram-builder-online/assets/index-Bor9_dy2.js"></script>
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@babel-DL81cLNu.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/react-CoXzz-GY.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/scheduler-CzFDRTuY.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/react-dom-DqgNK6QM.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/goober-DovPBWGu.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/notistack-y89oild8.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/hoist-non-react-statics-DQogQWOa.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/stylis-FDnFs_-n.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@emotion-BgjI-VtJ.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/react-is-DcfIKM1A.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/clsx-B-dksMZM.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/react-transition-group-BIXmmEtz.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@popperjs-BQBsAJpH.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@mui-Bq87vkUV.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/react-latex-next-ZDIlWtEp.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@eurydos-CQm71j7Q.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@lezer-mjs73VwX.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/crelt-C8TCjufn.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/style-mod-Bc2inJdb.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/w3c-keyname-Vcq4gwWv.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@codemirror-hB6RxGxE.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/@uiw-C-oNMM4C.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/file-saver-BzCbq6H9.js">
-		<link rel="modulepreload" crossorigin href="/project-structogram-builder-online/assets/html-to-image-iGH67oLV.js">
-		<link rel="stylesheet" crossorigin href="/project-structogram-builder-online/assets/index-1I9P5mQ_.css">
-		<link rel="stylesheet" crossorigin href="/project-structogram-builder-online/assets/@fontsource-SSAy28Vg.css">
-		<link rel="stylesheet" crossorigin href="/project-structogram-builder-online/assets/katex-C-v-ssyE.css">
-	</head>
-	<body>
-		<div id="root"></div>
-	</body>
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://eurydia.github.io/project-aventurine/"
+    />
+    <meta
+      property="og:title"
+      content="Build Structograms from C-style code | Project Aventurine"
+    />
+    <meta
+      property="og:description"
+      content="Create, preview, export, and share Nassi–Shneiderman diagrams from C-like code with LaTeX math rendering directly in your browser."
+    />
+    <meta property="og:site_name" content="Structogram Builder" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      property="og:image"
+      content="https://eurydia.github.io/project-aventurine/og.png"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://eurydia.github.io/project-aventurine/og.png"
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="2880" />
+    <meta property="og:image:height" content="1552" />
+    <meta
+      property="og:image:alt"
+      content="Project Aventurine social preview"
+    />
+
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="twitter:title"
+      content="Build Structograms from C-style code | Project Aventurine"
+    />
+    <meta
+      name="twitter:description"
+      content="Create, preview, export, and share Nassi–Shneiderman diagrams from C-like code with LaTeX math rendering directly in your browser."
+    />
+    <script type="module" crossorigin src="/project-aventurine/assets/index-7f7nGYvR.js"></script>
+    <link rel="modulepreload" crossorigin href="/project-aventurine/assets/rolldown-runtime-Bh1tDfsg.js">
+    <link rel="modulepreload" crossorigin href="/project-aventurine/assets/.pnpm-Rqb6gtax.js">
+    <link rel="stylesheet" crossorigin href="/project-aventurine/assets/.pnpm-CUMC4Z7w.css">
+    <link rel="stylesheet" crossorigin href="/project-aventurine/assets/index-SO_wKX7B.css">
+  </head>
+  <body>
+    <div id="root">
+      <main>
+        <header>
+          <h1>Online Nassi–Shneiderman Diagram Builder</h1>
+          <p>
+            Create and preview structograms from C-like code directly in your
+            browser.
+          </p>
+        </header>
+
+        <section>
+          <h2>Turn source code into clean structograms</h2>
+          <p>
+            Write or paste code, inspect the generated diagram, export the
+            result as an image, or share it through a link.
+          </p>
+        </section>
+      </main>
+    </div>
+  </body>
 </html>

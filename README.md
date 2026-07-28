@@ -8,17 +8,13 @@ _Aventurine_ lets you build, export, and share beautiful structograms from C-sty
 
 ## ~Syntax
 
-![](assets/images/syntax.png)
-
-### Input rules
-
 Most input is arbitrary. Outside recognized syntax blocks, everything before a terminating semicolon is displayed as process text.
 
 Only `if` / `else`, `for`, `while`, `do` / `while`, declarations followed by brace-delimited bodies, and balanced parentheses or braces are parsed structurally. Inline LaTeX is supported between single dollar signs.
 
 `//` starts a comment, so the remaining text on that line is ignored.
 
-### Process
+### ~Process
 
 Any free-form text becomes a process when it ends with a semicolon.
 
@@ -38,7 +34,7 @@ total = price * quantity;
 Send invoice to customer;
 ```
 
-### If / else
+### ~If / else
 
 Conditions and process text are free-form. The `else` branch is optional.
 
@@ -70,7 +66,7 @@ if (order is paid) {
 }
 ```
 
-### For loop
+### ~For loop
 
 The parser preserves any loop expression placed between the parentheses.
 
@@ -96,7 +92,7 @@ for (each item) {
 }
 ```
 
-### While loop
+### ~While loop
 
 The condition is checked before the body and may contain free-form text.
 
@@ -122,7 +118,7 @@ while (queue has items) {
 }
 ```
 
-### Do / while loop
+### ~Do / while loop
 
 The body runs before the condition. A trailing semicolon is required.
 
@@ -148,7 +144,7 @@ do {
 } while (answer is missing);
 ```
 
-### Function
+### ~Function
 
 Any declaration followed by a brace-delimited body is treated as a function.
 
@@ -175,7 +171,7 @@ workflow prepare(order) {
 }
 ```
 
-### Inline LaTeX
+### ~Inline LaTeX
 
 Dollar-delimited LaTeX can appear anywhere inside free-form process text.
 

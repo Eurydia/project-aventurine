@@ -1,8 +1,3 @@
-/**
- * This module implements a custom hook for controlling editor content
- */
-// ---------------------------------------------
-
 import { useState } from "react";
 
 /**

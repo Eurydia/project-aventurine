@@ -1,27 +1,23 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { LineBottomLeftTopRight } from "../assets/LineBottomLeftTopRight";
 import { LineTopLeftBottomRight } from "../assets/LineTopLeftBottomRight";
-import { TEXT_SHADOW } from "../constants";
-import { StructogramComponentText } from "./components/StructogramComponentText";
-import { StructogramComponentWrapper } from "./components/StructogramComponentWrapper";
+import { StructogramComponentText } from "./StructogramComponentText";
+import { StructogramComponentWrapper } from "./StructogramComponentWrapper";
 import { StructogramProcess } from "./StructogramProcess";
 
-type StructogramBinaryBranchProps = {
+export const StructogramBinaryBranch: FC<{
   condition?: string;
   childrenIf: ReactNode;
   childrenElse: ReactNode;
 
-  borderTop?: boolean;
-  borderBottom?: boolean;
-  borderRight?: boolean;
-  borderLeft?: boolean;
-};
-export const StructogramBinaryBranch: FC<StructogramBinaryBranchProps> = (
-  props,
-) => {
-  const { condition, childrenIf, childrenElse, ...rest } = props;
-
+  border?: Partial<{
+    top: boolean;
+    bottom: boolean;
+    right: boolean;
+    left: boolean;
+  }>;
+}> = (props) => {
   const ifBlockRef = useRef<HTMLDivElement | null>(null);
   const [ifBlockWidth, setIfLabelWidth] = useState<string | undefined>(
     undefined,
@@ -35,36 +31,35 @@ export const StructogramBinaryBranch: FC<StructogramBinaryBranchProps> = (
     setIfLabelWidth(`${ifWidth}px`);
   }, [ifBlockRef.current?.getBoundingClientRect()]);
 
-  let bodyIf: ReactNode = <StructogramProcess borderTop />;
-  if (childrenIf !== undefined) {
-    bodyIf = childrenIf;
-  }
-
-  let bodyElse: ReactNode = <StructogramProcess borderTop />;
-  if (childrenElse !== undefined) {
-    bodyElse = childrenElse;
-  }
-
   return (
-    <StructogramComponentWrapper {...rest}>
-      <Box width="100%" height="100%" display="flex" flexDirection="column">
-        <StructogramComponentText align="center">
-          {condition}
+    <StructogramComponentWrapper {...props.border}>
+      <Box
+        sx={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <StructogramComponentText sx={{ textAlign: "center" }}>
+          {props.condition}
         </StructogramComponentText>
-        <Box display="flex" flexDirection="row">
+        <Stack>
           <Box
-            width={ifBlockWidth}
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
+            sx={{
+              width: ifBlockWidth,
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+            }}
           >
             <StructogramComponentText
+              shadow
               sx={{
                 wordBreak: "keep-all",
                 zIndex: 2,
-                textShadow: TEXT_SHADOW,
               }}
             >
               True
@@ -72,56 +67,74 @@ export const StructogramBinaryBranch: FC<StructogramBinaryBranchProps> = (
             <LineTopLeftBottomRight htmlColor="black" />
           </Box>
           <Box
-            flexGrow={1}
-            height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            position="relative"
+            sx={{
+              width: ifBlockWidth,
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              flexGrow: 1,
+            }}
           >
             <LineBottomLeftTopRight />
             <StructogramComponentText
+              shadow
               sx={{
                 wordBreak: "keep-all",
                 zIndex: 2,
-                textShadow: TEXT_SHADOW,
               }}
             >
               False
             </StructogramComponentText>
           </Box>
-        </Box>
+        </Stack>
         <Box
-          width="100%"
-          maxWidth="100%"
-          height="100%"
-          display="flex"
-          flexDirection="row"
+          sx={{
+            width: "100%",
+            maxWidth: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "row",
+          }}
         >
           <Box
             ref={ifBlockRef}
             component={Box}
-            flexGrow={1}
-            flexShrink={1}
-            minWidth="20%"
-            minHeight="100%"
             sx={{
               borderColor: "inherit",
               borderRightStyle: "solid",
               borderRightWidth: 2,
+              minWidth: "20%",
+              minHeight: "100%",
+              flexGrow: 1,
+              flexShrink: 1,
             }}
           >
-            {bodyIf}
+            {props.childrenIf === undefined ? (
+              <StructogramProcess border={{ top: true }} />
+            ) : (
+              props.childrenIf
+            )}
           </Box>
           <Box
-            display="flex"
-            flexGrow={1}
-            flexShrink={1}
-            flexDirection="column"
-            minWidth="20%"
-            minHeight="100%"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              borderColor: "inherit",
+              borderRightStyle: "solid",
+              borderRightWidth: 2,
+              minWidth: "20%",
+              minHeight: "100%",
+              flexGrow: 1,
+              flexShrink: 1,
+            }}
           >
-            {bodyElse}
+            {props.childrenElse === undefined ? (
+              <StructogramProcess border={{ top: true }} />
+            ) : (
+              props.childrenElse
+            )}
           </Box>
         </Box>
       </Box>

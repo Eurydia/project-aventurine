@@ -1,38 +1,30 @@
 import { Box } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { FC, PropsWithChildren } from "react";
 import { StructogramComponentText } from "./StructogramComponentText";
 import { StructogramComponentWrapper } from "./StructogramComponentWrapper";
 import { StructogramProcess } from "./StructogramProcess";
 
-type StructogramLoopFirstProps = {
-	condition: string | undefined;
-	children?: ReactNode;
-	borderTop?: boolean;
-	borderBottom?: boolean;
-	borderRight?: boolean;
-	borderLeft?: boolean;
-};
 export const StructogramLoopFirst: FC<
-	StructogramLoopFirstProps
+  PropsWithChildren<{
+    condition: string | undefined;
+    border?: Partial<{
+      top: boolean;
+      bottom: boolean;
+      right: boolean;
+      left: boolean;
+    }>;
+  }>
 > = (props) => {
-	const { condition, children, ...rest } = props;
-
-	let body: ReactNode = (
-		<StructogramProcess
-			borderTop
-			borderLeft
-		/>
-	);
-	if (children !== undefined) {
-		body = children;
-	}
-
-	return (
-		<StructogramComponentWrapper {...rest}>
-			<StructogramComponentText>
-				{condition}
-			</StructogramComponentText>
-			<Box paddingLeft={2}>{body}</Box>
-		</StructogramComponentWrapper>
-	);
+  return (
+    <StructogramComponentWrapper border={props.border}>
+      <StructogramComponentText>{props.condition}</StructogramComponentText>
+      <Box sx={{ paddingLeft: 2 }}>
+        {props.children !== undefined ? (
+          props.children
+        ) : (
+          <StructogramProcess border={{ top: true, left: true }} />
+        )}
+      </Box>
+    </StructogramComponentWrapper>
+  );
 };

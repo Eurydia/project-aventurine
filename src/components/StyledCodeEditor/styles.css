@@ -7,7 +7,7 @@
 .cm-editor,
 .cm-content,
 .cm-gutterElement {
-	font-family: "Fira Code";
+	font-family: 'Fira Code Variable', monospace;
 	font-variant-ligatures: contextual;
 	font-feature-settings: "calt";
 }

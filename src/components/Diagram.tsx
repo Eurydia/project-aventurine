@@ -1,14 +1,12 @@
-import {
-  StructogramBinaryBranch,
-  StructogramError,
-  StructogramFunction,
-  StructogramLoopFirst,
-  StructogramLoopLast,
-  StructogramProcess,
-} from "@eurydos/structogram-component";
 import { FC, Fragment, ReactNode } from "react";
 import { DiagramToken } from "~/core/lexer";
 import { DiagramNode, DiagramNodeKind } from "~/core/parser";
+import { StructogramBinaryBranch } from "./diagram/blocks/StructogramBinaryBranch";
+import { StructogramError } from "./diagram/blocks/StructogramError";
+import { StructogramFunction } from "./diagram/blocks/StructogramFunction";
+import { StructogramLoopFirst } from "./diagram/blocks/StructogramLoopFirst";
+import { StructogramLoopLast } from "./diagram/blocks/StructogramLoopLast";
+import { StructogramProcess } from "./diagram/blocks/StructogramProcess";
 
 type DiagramProcessProps = {
   bodyTokens?: DiagramToken[];

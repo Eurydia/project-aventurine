@@ -2,24 +2,18 @@ import { FC } from "react";
 import { StructogramComponentText } from "./StructogramComponentText";
 import { StructogramComponentWrapper } from "./StructogramComponentWrapper";
 
-type StructogramProcessProps = {
-	children?: string;
-
-	borderTop?: boolean;
-	borderBottom?: boolean;
-	borderRight?: boolean;
-	borderLeft?: boolean;
-};
-export const StructogramProcess: FC<
-	StructogramProcessProps
-> = (props) => {
-	const { children, ...rest } = props;
-
-	return (
-		<StructogramComponentWrapper {...rest}>
-			<StructogramComponentText>
-				{children}
-			</StructogramComponentText>
-		</StructogramComponentWrapper>
-	);
+export const StructogramProcess: FC<{
+  children?: string;
+  border?: Partial<{
+    top: boolean;
+    bottom: boolean;
+    right: boolean;
+    left: boolean;
+  }>;
+}> = (props) => {
+  return (
+    <StructogramComponentWrapper border={props.border}>
+      <StructogramComponentText>{props.children}</StructogramComponentText>
+    </StructogramComponentWrapper>
+  );
 };
